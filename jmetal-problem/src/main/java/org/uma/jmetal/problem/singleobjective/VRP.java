@@ -44,7 +44,7 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
     @Override
     public void evaluate(PermutationSolution<Integer> solution) {
-
+        // TODO How can I represent the problem
     }
 
     /**
@@ -56,6 +56,7 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @throws              IOException
      */
     private double [][] readProblem(String fileName, boolean header, String separator) throws IOException {
+        // TODO Insert custom links to get a complete graph
         double [][] matrix = null;
         String []   headerLine = null;
 
