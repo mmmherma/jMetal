@@ -11,8 +11,7 @@ public class VRPTest {
     @Test
     public void testReadProblem() {
         try {
-            System.out.println("Working Directory = " +
-                    System.getProperty("user.dir"));
+            System.out.println("INIT TEST");
             VRP vrp = new VRP("src/main/resources/vrpdata/89-traffic", true, "\",\"");
         } catch (IOException e) {
             e.printStackTrace();

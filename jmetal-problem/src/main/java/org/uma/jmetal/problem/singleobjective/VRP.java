@@ -5,10 +5,7 @@ import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.JMetalException;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class to solve single objective VRP using static CSV from NY City DOT files:
@@ -134,52 +131,55 @@ public class VRP extends AbstractIntegerPermutationProblem {
         double distance = 0;
 
         // Get path
-        String [] coordinates = null;
         // Split coordinates by one or more spaces
-        coordinates = path.split("\\s+");
+        List<String> coordinates = new LinkedList<String>(Arrays.asList(path.split("\\s+")));
 
         // Clean coordinates
-        //      Remove presision lower than 4 decimals at latitude or longitude
+        //      Remove precision lower than 4 decimals at latitude or longitude
         //      Clean coordinates within only latitude or longitude
         int i = 0;
-        while (i < coordinates.length - 1) {
-            String [] latitudeLongitude = coordinates[i].split(",");
+        while (i < coordinates.size()) {
+            String [] latitudeLongitude = coordinates.get(i).split(",");
             if(latitudeLongitude.length == 2) {
+                // Get latitude and longitude
                 String latitude = latitudeLongitude[0];
                 String longitude = latitudeLongitude[1];
+
                 // Get latitude and longitude precision
                 int latitudePrecision = latitude.length() - latitude.indexOf('.') - 1;
                 int longitudePrecision = longitude.length() - longitude.indexOf('.') - 1;
 
+                // Check latitude and longitude precision
                 if(latitudePrecision < 4 || longitudePrecision < 4) {
-                    System.out.println(coordinates[i]);
-                    System.out.println(latitude);
-                    System.out.println(longitude);
-                    System.out.println(i);
-                    System.out.println("REMOVE 1");
-
-                    for(int j = i; j < coordinates.length-2; j++) {
-                        coordinates[j] = coordinates[j + 1];
-                    }
+                    // Remove item
+                    coordinates.remove(i);
                 } else {
                     i++;
                 }
             } else {
-                System.out.println("REMOVE 2");
-                for(int j = i; j < coordinates.length-2; j++) {
-                    coordinates[j] = coordinates[j+1];
-                }
+                // Remove item
+                coordinates.remove(i);
             }
         }
 
-        // Parse coordinates
-        for (int k = 0; k < coordinates.length-1; k++) {
-
-            System.out.println(coordinates[k]);
-        }
-
-        System.out.println("END");
+        // Compute distance using haversine formula
 
         return distance;
+    }
+
+    double distanceFromCoordinates(double latitude1, double longitude1, double latitude2, double longitude2) {
+        double earthRadius = 6371e3;
+        double toRadians = Math.PI / 180.0;
+
+        latitude1 = latitude1 * toRadians;
+        latitude2 = latitude2 * toRadians;
+
+        double latitudeDifference = latitude2*toRadians - latitude1*toRadians;
+        double longitudeDifference = longitude2*toRadians - longitude1*toRadians;
+
+        double a = Math.sin(latitudeDifference/2) * Math.sin(latitudeDifference/2) + Math.cos(latitude1) * Math.cos(latitude2) * Math.sin(longitudeDifference/2) * Math.sin(longitudeDifference/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return earthRadius * c;
     }
 }
