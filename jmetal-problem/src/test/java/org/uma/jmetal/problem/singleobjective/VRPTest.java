@@ -11,7 +11,9 @@ public class VRPTest {
     @Test
     public void testReadProblem() {
         try {
-            VRP vrp = new VRP("/home/marcos/Documents/github/jMetalSP/outputTraffic/89-traffic", true, "\",\"");
+            System.out.println("Working Directory = " +
+                    System.getProperty("user.dir"));
+            VRP vrp = new VRP("src/main/resources/vrpdata/89-traffic", true, "\",\"");
         } catch (IOException e) {
             e.printStackTrace();
         }
