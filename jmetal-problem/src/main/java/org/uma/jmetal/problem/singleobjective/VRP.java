@@ -128,8 +128,6 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @return Distance (meters)
      */
     double computeDistance(String path) {
-        double distance = 0;
-
         // Get path
         // Split coordinates by one or more spaces
         List<String> coordinates = new LinkedList<String>(Arrays.asList(path.split("\\s+")));
@@ -162,7 +160,18 @@ public class VRP extends AbstractIntegerPermutationProblem {
             }
         }
 
-        // Compute distance using haversine formula
+        // Compute clean path distance using haversine formula
+        double distance = 0;
+        for(int k = 0; k < coordinates.size()-1; k++) {
+            String [] latitudeLongitude1 = coordinates.get(k).split(",");
+            String [] latitudeLongitude2 = coordinates.get(k+1).split(",");
+            distance += distanceFromCoordinates(Double.parseDouble(latitudeLongitude1[0]),
+                    Double.parseDouble(latitudeLongitude1[1]),
+                    Double.parseDouble(latitudeLongitude2[0]),
+                    Double.parseDouble(latitudeLongitude2[1])
+            );
+        }
+        System.out.println("Compute distance: " + distance);
 
         return distance;
     }
