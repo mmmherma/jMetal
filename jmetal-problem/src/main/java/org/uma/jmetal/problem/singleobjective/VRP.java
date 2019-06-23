@@ -26,8 +26,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
     /**
      * VRP constructor
-     * @param fileName Absolute path to CSV file NY City DOT
-     * @throws IOException
+     * @param fileName  Absolute path to CSV file NY City DOT
+     * @throws          IOException
      */
     public VRP(String fileName, boolean header, String separator) throws IOException {
         distanceMatrix = readProblem(fileName, header, separator);
@@ -49,11 +49,11 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
     /**
      * Reads CSV file and builds the distance matrix to optimize
-     * @param fileName Absolute path to CSV file
-     * @param header true IF file has header ELSE false
-     * @param separator Character used to split CSV lines (usually ',')
-     * @return Distance matrix
-     * @throws IOException
+     * @param fileName      Absolute path to CSV file
+     * @param header        true IF file has header ELSE false
+     * @param separator     Character used to split CSV lines (usually ',')
+     * @return              Distance matrix
+     * @throws              IOException
      */
     private double [][] readProblem(String fileName, boolean header, String separator) throws IOException {
         double [][] matrix = null;
@@ -94,17 +94,19 @@ public class VRP extends AbstractIntegerPermutationProblem {
                     if(timestampMap.containsKey(fields[0])) {
                         if(fields[4].compareTo(timestampMap.get(fields[0])) < 0) {
                             // Substitude new timestamp
-                            //timestampMap.put(fields[0], fields[4]);
+                            timestampMap.put(fields[0], fields[4]);
 
                             // Compute element distance
                             double distance = computeDistance(fields[6]);
+                            System.out.println("Link " + fields[0] + " has " + distance + " meters");
                         }
                     } else {
                         // Insert new element
-                        //timestampMap.put(fields[0], fields[4]);
+                        timestampMap.put(fields[0], fields[4]);
 
                         // Compute element distance
                         double distance = computeDistance(fields[6]);
+                        System.out.println("Link " + fields[0] + " has " + distance + " meters");
                     }
                 }
 
@@ -112,8 +114,6 @@ public class VRP extends AbstractIntegerPermutationProblem {
                 for (int i = 0; i < fields.length; i++) {
                     parsedLine += headerLine[i] + ": " + fields[i] + " ";
                 }
-                //System.out.println(parsedLine);
-                //System.out.println("*******");
             }
         } catch (Exception e) {
             System.out.println("VRP::readProblem::Error parsing " + e.toString());
@@ -124,8 +124,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
     /**
      * Given a path this function computes the distance (meters) of this path
-     * @param path The path to compute distance
-     * @return Distance (meters)
+     * @param path  The path to compute distance
+     * @return      Distance (meters)
      */
     double computeDistance(String path) {
         // Get path
@@ -171,24 +171,36 @@ public class VRP extends AbstractIntegerPermutationProblem {
                     Double.parseDouble(latitudeLongitude2[1])
             );
         }
-        System.out.println("Compute distance: " + distance);
 
         return distance;
     }
 
+    /**
+     * Given 2 GPS coordinates this function computes the distance (meters) between them. Based on:
+     *      https://www.movable-type.co.uk/scripts/latlong.html
+     * @param latitude1     First GPS coordinate latitude
+     * @param longitude1    First GPS coordinate longitude
+     * @param latitude2     Secoond GPS coordinate latitude
+     * @param longitude2    Second GPS coordinate longitude
+     * @return              Distance between them (meters)
+     */
     double distanceFromCoordinates(double latitude1, double longitude1, double latitude2, double longitude2) {
-        double earthRadius = 6371e3;
-        double toRadians = Math.PI / 180.0;
+        // Set Earth radius
+        double earthDIameter = 6371e3;
 
-        latitude1 = latitude1 * toRadians;
-        latitude2 = latitude2 * toRadians;
+        // Latitudes to radians
+        latitude1 = Math.toRadians(latitude1);
+        latitude2 = Math.toRadians(latitude2);
 
-        double latitudeDifference = latitude2*toRadians - latitude1*toRadians;
-        double longitudeDifference = longitude2*toRadians - longitude1*toRadians;
+        // Difference between latitudes and longitudes in radians
+        double latitudeDifference = Math.toRadians(latitude2) - Math.toRadians(latitude1);
+        double longitudeDifference = Math.toRadians(longitude2) - Math.toRadians(longitude1);
 
-        double a = Math.sin(latitudeDifference/2) * Math.sin(latitudeDifference/2) + Math.cos(latitude1) * Math.cos(latitude2) * Math.sin(longitudeDifference/2) * Math.sin(longitudeDifference/2);
+        // Compute distance
+        double a = Math.sin(latitudeDifference/2) * Math.sin(latitudeDifference/2) +
+                Math.cos(latitude1) * Math.cos(latitude2) * Math.sin(longitudeDifference/2) * Math.sin(longitudeDifference/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-        return earthRadius * c;
+        return earthDIameter * c;
     }
 }
