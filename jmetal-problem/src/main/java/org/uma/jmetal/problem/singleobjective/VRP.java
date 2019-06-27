@@ -30,9 +30,11 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @param fileName  Absolute path to CSV file NY City DOT
      * @throws          IOException
      */
-    public VRP(String fileName, boolean header, String separator) throws IOException {
+    public VRP(String fileName, boolean header, String separator, double capacity) throws IOException {
         // Get the distance matrix reading an instance of the problem
         distanceMatrix = readProblem(fileName, header, separator);
+        vehicleCapacity = capacity;
+
         // Set client number (number of path * 2) - 1
         setNumberOfVariables(numberOfClients);
         setNumberOfObjectives(1);
@@ -126,6 +128,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
                 //    parsedLine += headerLine[i] + ": " + fields[i] + " ";
                 //}
             }
+
+            this.numberOfClients = (2*distanceMap.size()) - 1;
         } catch (Exception e) {
             System.out.println("VRP::readProblem::Error parsing " + e.toString());
         }
