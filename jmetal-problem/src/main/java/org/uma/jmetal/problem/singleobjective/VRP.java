@@ -23,6 +23,7 @@ public class VRP extends AbstractIntegerPermutationProblem {
             384, 402, 416, 418, 422, 425, 426, 428, 430, 431, 433, 434, 440, 448, 450, 453};
     private List<Integer> listOfValidNodes = Arrays.asList(validNodes);
     Map<String, String> timestampMap;
+    Map<String, Double> distanceMap;
 
     /**
      * VRP constructor
@@ -30,8 +31,9 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @throws          IOException
      */
     public VRP(String fileName, boolean header, String separator) throws IOException {
+        // Get the distance matrix reading an instance of the problem
         distanceMatrix = readProblem(fileName, header, separator);
-
+        // Set client number (number of path * 2) - 1
         setNumberOfVariables(numberOfClients);
         setNumberOfObjectives(1);
         setName("VRP");
@@ -56,6 +58,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @throws              IOException
      */
     private double [][] readProblem(String fileName, boolean header, String separator) throws IOException {
+        System.out.println("Working Directory = " +
+              System.getProperty("user.dir")+fileName);
         // TODO Insert custom links to get a complete graph
         double [][] matrix = null;
         String []   headerLine = null;
@@ -80,6 +84,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
             matrix = new double[listOfValidNodes.size()][listOfValidNodes.size()];
             // Initialize timestamp map (avoids null pointer exception)
             timestampMap = new HashMap<>();
+            // Initialize distance map (store each link distence)
+            distanceMap = new HashMap<String, Double>();
 
             // Remove " from first and last field
             String line = "";
@@ -99,6 +105,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
                             // Compute element distance
                             double distance = computeDistance(fields[6]);
+                            // Store link_id distance
+                            distanceMap.put(fields[0], distance);
                             System.out.println("Link " + fields[0] + " has " + distance + " meters");
                         }
                     } else {
@@ -107,14 +115,16 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
                         // Compute element distance
                         double distance = computeDistance(fields[6]);
+                        // Store link_id distance
+                        distanceMap.put(fields[0], distance);
                         System.out.println("Link " + fields[0] + " has " + distance + " meters");
                     }
                 }
 
-                String parsedLine = "";
-                for (int i = 0; i < fields.length; i++) {
-                    parsedLine += headerLine[i] + ": " + fields[i] + " ";
-                }
+                //String parsedLine = "";
+                //for (int i = 0; i < fields.length; i++) {
+                //    parsedLine += headerLine[i] + ": " + fields[i] + " ";
+                //}
             }
         } catch (Exception e) {
             System.out.println("VRP::readProblem::Error parsing " + e.toString());
