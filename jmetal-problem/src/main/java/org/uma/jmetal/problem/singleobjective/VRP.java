@@ -17,13 +17,21 @@ public class VRP extends AbstractIntegerPermutationProblem {
     private double [][] clientsDemand;
     private double [][] distanceMatrix;
 
+    // Array of valid nodes. Check them when building the matrix
     private Integer []   validNodes = new Integer[] {1, 2, 4, 110, 124, 126, 129, 140, 141, 142, 145, 150, 153, 154,
             155, 159, 164, 165, 167, 169, 170, 171, 177, 184, 186, 199, 205, 207, 208, 211, 213, 215, 217, 221, 222,
             257, 258, 264, 298, 311, 318, 319, 324, 332, 338, 344, 349, 351, 354, 364, 375, 376, 377, 378, 381, 383,
-            384, 402, 416, 418, 422, 425, 426, 428, 430, 431, 433, 434, 440, 448, 450, 453};
+            384, 402, 416, 418, 422, 425, 426, 428, 430, 431, 433, 434, 440, 448, 450, 453, 600, 601, 602, 603, 604,
+            605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625,
+            626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641};
+    // Converto to List
     private List<Integer> listOfValidNodes = Arrays.asList(validNodes);
+    // Timestamps maps. Prevent the problem to get old data
     Map<String, String> timestampMap;
+    // Map to store distances between vertex
     Map<String, Double> distanceMap;
+    // Map to store average time to travel the edge
+    Map<String, String> timeMap;
 
     /**
      * VRP constructor
@@ -88,6 +96,8 @@ public class VRP extends AbstractIntegerPermutationProblem {
             timestampMap = new HashMap<>();
             // Initialize distance map (store each link distence)
             distanceMap = new HashMap<String, Double>();
+            // Initialize the time map (store each link average time)
+            timeMap = new HashMap<String, String>();
 
             // Remove " from first and last field
             String line = "";
@@ -109,7 +119,10 @@ public class VRP extends AbstractIntegerPermutationProblem {
                             double distance = computeDistance(fields[6]);
                             // Store link_id distance
                             distanceMap.put(fields[0], distance);
+                            // Store average time
+                            timeMap.put(fields[0], fields[2]);
                             System.out.println("Link " + fields[0] + " has " + distance + " meters");
+                            System.out.println("Link " + fields[0] + " has " + fields[2] + " seconds");
                         }
                     } else {
                         // Insert new element
@@ -119,7 +132,10 @@ public class VRP extends AbstractIntegerPermutationProblem {
                         double distance = computeDistance(fields[6]);
                         // Store link_id distance
                         distanceMap.put(fields[0], distance);
+                        // Store average time
+                        timeMap.put(fields[0], fields[2]);
                         System.out.println("Link " + fields[0] + " has " + distance + " meters");
+                        System.out.println("Link " + fields[0] + " has " + fields[2] + " seconds");
                     }
                 }
 

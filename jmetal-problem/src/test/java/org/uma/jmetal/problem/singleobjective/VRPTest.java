@@ -12,7 +12,7 @@ public class VRPTest {
     public void testReadProblem() {
         try {
             System.out.println("INIT TEST");
-            VRP vrp = new VRP("src/main/resources/vrpdata/89-traffic", true, "\",\"", 100);
+            VRP vrp = new VRP("src/main/resources/vrpdata/custom", true, "\",\"", 100);
         } catch (IOException e) {
             e.printStackTrace();
         }
