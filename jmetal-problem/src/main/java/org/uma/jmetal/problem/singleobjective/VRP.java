@@ -1,8 +1,7 @@
 package org.uma.jmetal.problem.singleobjective;
 
-import org.uma.jmetal.problem.impl.AbstractIntegerPermutationProblem;
-import org.uma.jmetal.solution.PermutationSolution;
-import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.problem.permutationproblem.impl.AbstractIntegerPermutationProblem;
+import org.uma.jmetal.solution.permutationsolution.PermutationSolution;
 
 import java.io.*;
 import java.util.*;
@@ -49,8 +48,10 @@ public class VRP extends AbstractIntegerPermutationProblem {
         setName("VRP");
     }
 
+
+
     @Override
-    public int getPermutationLength() {
+    public int getLength() {
         return numberOfClients;
     }
 
