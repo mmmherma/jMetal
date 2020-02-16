@@ -69,15 +69,16 @@ public class VRP extends AbstractIntegerPermutationProblem {
      * @throws              IOException
      */
     private double [][] readProblem(String fileName, boolean header, String separator) throws IOException {
-        System.out.println("Working Directory = " +
-              System.getProperty("user.dir")+fileName);
+        System.out.println("Working Directory = " + System.getProperty("user.dir")+fileName);
+
+        InputStream in = getClass().getResourceAsStream(fileName);
         // TODO Insert custom links to get a complete graph
         double [][] matrix = null;
         String []   headerLine = null;
 
         try {
             // Read CSV file from fileName
-            FileReader fReader = new FileReader(fileName);
+            FileReader fReader = new FileReader(System.getProperty("user.dir")+fileName);
             BufferedReader br = new BufferedReader(fReader);
 
             if(header) {
