@@ -2,10 +2,10 @@ FROM openjdk:8-jre
 
 ADD jmetal-example/target/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar /opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar
 
-RUN mkdir -p /data/
+RUN mkdir -p /data/output
 
 COPY resources/vrpdata/89-traffic /data/
 
-WORKDIR /data/
+WORKDIR /data/output
 
 CMD ["java", "-cp", "/opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar", "org.uma.jmetal.example.singleobjective.VRPRunner", "/data/89-traffic"]
