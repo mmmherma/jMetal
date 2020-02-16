@@ -78,7 +78,7 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
         try {
             // Read CSV file from fileName
-            FileReader fReader = new FileReader(System.getProperty("user.dir")+fileName);
+            FileReader fReader = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fReader);
 
             if(header) {

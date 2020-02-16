@@ -30,7 +30,8 @@ public class VRPRunner {
         SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
         try {
-            problem = new VRP("/resources/vrpdata/89-traffic", true, "\",\"", 100);
+            //problem = new VRP("/resources/vrpdata/89-traffic", true, "\",\"", 100);
+            problem = new VRP(args[0], true, "\",\"", 100);
 
             crossover = new PMXCrossover(0.9) ;
 
