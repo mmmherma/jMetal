@@ -2,8 +2,6 @@ package org.uma.jmetal.algorithm.multiobjective.moead.jmetal5version;
 
 import org.junit.Test;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.moead.jmetal5version.AbstractMOEAD;
-import org.uma.jmetal.algorithm.multiobjective.moead.jmetal5version.MOEADBuilder;
 import org.uma.jmetal.algorithm.multiobjective.moead.jmetal5version.MOEADBuilder.Variant;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.crossover.impl.DifferentialEvolutionCrossover;
@@ -13,7 +11,7 @@ import org.uma.jmetal.problem.doubleproblem.DoubleProblem;
 import org.uma.jmetal.problem.multiobjective.Srinivas;
 import org.uma.jmetal.problem.multiobjective.Tanaka;
 import org.uma.jmetal.qualityindicator.QualityIndicator;
-import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.impl.PISAHypervolume;
 import org.uma.jmetal.solution.doublesolution.DoubleSolution;
 
 import java.util.List;
@@ -47,7 +45,7 @@ public class ConstraintMOEADIT {
         .setMaximumNumberOfReplacedSolutions(2)
         .setNeighborSize(20)
         .setFunctionType(AbstractMOEAD.FunctionType.TCHE)
-        .setDataDirectory("../resources/weightVectorFiles/moead")
+        .setDataDirectory("../../resources/weightVectorFiles/moead")
         .build();
 
     algorithm.run() ;
@@ -90,7 +88,7 @@ public class ConstraintMOEADIT {
     List<DoubleSolution> population = algorithm.getResult();
 
     QualityIndicator<List<DoubleSolution>, Double> hypervolume =
-        new PISAHypervolume<>("../resources/referenceFronts/Tanaka.pf");
+        new PISAHypervolume<>("../resources/referenceFrontsCSV/Tanaka.pf");
 
     // Rationale: the default problem is Tanaka", and the constraint MOEA/D algoritm,
     // configured with standard settings, should return find a front with a hypervolume value higher

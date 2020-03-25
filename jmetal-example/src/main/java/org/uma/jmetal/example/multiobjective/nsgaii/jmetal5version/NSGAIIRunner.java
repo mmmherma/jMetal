@@ -18,7 +18,7 @@ import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
-import org.uma.jmetal.util.front.imp.ArrayFront;
+import org.uma.jmetal.util.front.impl.ArrayFront;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -51,7 +51,7 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
       referenceParetoFront = args[1];
     } else {
       problemName = "org.uma.jmetal.problem.multiobjective.zdt.ZDT1" ;
-      referenceParetoFront = "resources/referenceFronts/ZDT1.pf";
+      referenceParetoFront = "resources/referenceFrontsCSV/ZDT1.pf";
     }
 
     problem = ProblemUtils.<DoubleSolution>loadProblem(problemName);

@@ -1,16 +1,8 @@
 package org.uma.jmetal.example.multiobjective.moead;
 
+import org.uma.jmetal.algorithm.ComponentBasedEvolutionaryAlgorithm;
 import org.uma.jmetal.algorithm.multiobjective.moead.MOEADDE;
-import org.uma.jmetal.algorithm.multiobjective.moead.MOEADDEWithArchive;
-import org.uma.jmetal.algorithm.multiobjective.moead.MOEADWithArchive;
-import org.uma.jmetal.component.initialsolutioncreation.impl.RandomSolutionsCreation;
-import org.uma.jmetal.component.replacement.impl.MOEADReplacement;
-import org.uma.jmetal.component.selection.impl.PopulationAndNeighborhoodMatingPoolSelection;
 import org.uma.jmetal.component.termination.impl.TerminationByEvaluations;
-import org.uma.jmetal.component.variation.impl.DifferentialCrossoverVariation;
-import org.uma.jmetal.operator.crossover.impl.DifferentialEvolutionCrossover;
-import org.uma.jmetal.operator.mutation.MutationOperator;
-import org.uma.jmetal.operator.mutation.impl.PolynomialMutation;
 import org.uma.jmetal.problem.doubleproblem.DoubleProblem;
 import org.uma.jmetal.solution.doublesolution.DoubleSolution;
 import org.uma.jmetal.util.AbstractAlgorithmRunner;
@@ -23,10 +15,7 @@ import org.uma.jmetal.util.archive.Archive;
 import org.uma.jmetal.util.archive.impl.NonDominatedSolutionListArchive;
 import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
-import org.uma.jmetal.util.neighborhood.impl.WeightVectorNeighborhood;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
-import org.uma.jmetal.util.sequencegenerator.SequenceGenerator;
-import org.uma.jmetal.util.sequencegenerator.impl.IntegerPermutationGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -44,10 +33,10 @@ public class MOEADDEWithUnboundedNonDominatedArchiveExample extends AbstractAlgo
    */
   public static void main(String[] args) throws FileNotFoundException {
     DoubleProblem problem;
-    MOEADDE algorithm;
+    ComponentBasedEvolutionaryAlgorithm<DoubleSolution> algorithm;
 
     String problemName = "org.uma.jmetal.problem.multiobjective.dtlz.DTLZ1";
-    String referenceParetoFront = "referenceFronts/LZ09_F6.pf";
+    String referenceParetoFront = "resources/referenceFronts/DTLZ1.3D.pf";
 
     problem = (DoubleProblem) ProblemUtils.<DoubleSolution>loadProblem(problemName);
 
@@ -66,29 +55,30 @@ public class MOEADDEWithUnboundedNonDominatedArchiveExample extends AbstractAlgo
     Archive<DoubleSolution> archive = new NonDominatedSolutionListArchive<>();
 
     algorithm =
-        new MOEADDEWithArchive(
-            problem,
-            populationSize,
-            cr,
-            f,
-            aggregativeFunction,
-            neighborhoodSelectionProbability,
-            maximumNumberOfReplacedSolutions,
-            neighborhoodSize,
-            "resources/weightVectorFiles/moead",
-            archive, new TerminationByEvaluations(maximumNumberOfFunctionEvaluations));
+        new MOEADDE(
+                problem,
+                populationSize,
+                cr,
+                f,
+                aggregativeFunction,
+                neighborhoodSelectionProbability,
+                maximumNumberOfReplacedSolutions,
+                neighborhoodSize,
+                "resources/weightVectorFiles/moead",
+                new TerminationByEvaluations(maximumNumberOfFunctionEvaluations))
+            .withArchive(archive);
 
     algorithm.run();
 
-    List<DoubleSolution> population = SolutionListUtils.distanceBasedSubsetSelection(algorithm.getResult(), 100);
-    // MOEADUtils.getSubsetOfEvenlyDistributedSolutions(algorithm.getResult(), 100) ;
+    List<DoubleSolution> population =
+        SolutionListUtils.distanceBasedSubsetSelection(algorithm.getResult(), 100);
 
     JMetalLogger.logger.info("Total execution time : " + algorithm.getTotalComputingTime() + "ms");
     JMetalLogger.logger.info("Number of evaluations: " + algorithm.getEvaluations());
 
     new SolutionListOutput(population)
-        .setVarFileOutputContext(new DefaultFileOutputContext("VAR.csv"))
-        .setFunFileOutputContext(new DefaultFileOutputContext("FUN.csv"))
+        .setVarFileOutputContext(new DefaultFileOutputContext("VAR.csv", ","))
+        .setFunFileOutputContext(new DefaultFileOutputContext("FUN.csv", ","))
         .print();
 
     JMetalLogger.logger.info("Random seed: " + JMetalRandom.getInstance().getSeed());

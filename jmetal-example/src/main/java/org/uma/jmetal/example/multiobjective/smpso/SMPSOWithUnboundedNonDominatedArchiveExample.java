@@ -1,6 +1,5 @@
 package org.uma.jmetal.example.multiobjective.smpso;
 
-import org.uma.jmetal.algorithm.multiobjective.smpso.SMPSO;
 import org.uma.jmetal.algorithm.multiobjective.smpso.SMPSOWithArchive;
 import org.uma.jmetal.component.evaluation.Evaluation;
 import org.uma.jmetal.component.evaluation.impl.SequentialEvaluation;
@@ -36,7 +35,7 @@ public class SMPSOWithUnboundedNonDominatedArchiveExample extends AbstractAlgori
     MutationOperator<DoubleSolution> mutation;
 
     String problemName = "org.uma.jmetal.problem.multiobjective.dtlz.DTLZ";
-    String referenceParetoFront = "resources/referenceFronts/DTLZ2.3D.pf" ;
+    String referenceParetoFront = "resources/referenceFrontsCSV/DTLZ2.3D.pf" ;
 
     problem = (DoubleProblem) ProblemUtils.<DoubleSolution>loadProblem(problemName);
 
@@ -47,7 +46,7 @@ public class SMPSOWithUnboundedNonDominatedArchiveExample extends AbstractAlgori
     double mutationDistributionIndex = 20.0 ;
     mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex) ;
 
-    Evaluation<DoubleSolution> evaluation = new SequentialEvaluation<>() ;
+    Evaluation<DoubleSolution> evaluation = new SequentialEvaluation<>(problem) ;
     Termination termination = new TerminationByEvaluations(50000) ;
 
     Archive<DoubleSolution> externalArchive = new NonDominatedSolutionListArchive<>() ;
