@@ -57,7 +57,28 @@ public class VRP extends AbstractIntegerPermutationProblem {
 
     @Override
     public void evaluate(PermutationSolution<Integer> solution) {
-        // TODO How can I represent the problem
+        double fitness1   ;
+
+        fitness1 = 0.0 ;
+
+        for (int i = 0; i < (numberOfClients - 1); i++) {
+            int x ;
+            int y ;
+
+            x = solution.getVariable(i) ;
+            y = solution.getVariable(i+1) ;
+
+            fitness1 += distanceMatrix[x][y] ;
+        }
+        int firstClient ;
+        int lastClient  ;
+
+        firstClient = solution.getVariable(0) ;
+        lastClient = solution.getVariable(numberOfClients - 1) ;
+
+        fitness1 += distanceMatrix[firstClient][lastClient] ;
+
+        solution.setObjective(0, fitness1);
     }
 
     /**
