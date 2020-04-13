@@ -21,7 +21,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VRPRunner {
+public class GenerationalGeneticAlgorithmVRPRunner {
     public static void main(String[] args) throws Exception {
         PermutationProblem<PermutationSolution<Integer>> problem;
         Algorithm<PermutationSolution<Integer>> algorithm;
@@ -29,15 +29,8 @@ public class VRPRunner {
         MutationOperator<PermutationSolution<Integer>> mutation;
         SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-        if(args.length < 1) {
-            System.out.println("Invalid number of arguments. Please, insert absolute path of testing data file:");
-            System.out.println("\tjava -cp /opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar org.uma.jmetal.example.singleobjective.VRPRunner /<path>/<to>/<jMetal>/resources/vrpdata/89-traffic");
-            throw new Exception("Invalid number of arguments. Testing absolute path to VRP data needed.");
-        }
-
         try {
-            //problem = new VRP("/resources/vrpdata/89-traffic", true, "\",\"", 100);
-            problem = new VRP(args[0], true, "\",\"", 100);
+            problem = new VRP("resources/vrpdata/89-traffic", true, "\",\"", 100);
 
             crossover = new PMXCrossover(0.9) ;
 

@@ -55,9 +55,12 @@ public class VRP extends AbstractIntegerPermutationProblem {
         return numberOfClients;
     }
 
-    @Override
     public void evaluate(PermutationSolution<Integer> solution) {
         double fitness1   ;
+
+        for(int i = 0; i < numberOfClients-1; i++) {
+            System.out.println(solution.getVariable(i));
+        }
 
         fitness1 = 0.0 ;
 
@@ -68,7 +71,11 @@ public class VRP extends AbstractIntegerPermutationProblem {
             x = solution.getVariable(i) ;
             y = solution.getVariable(i+1) ;
 
-            fitness1 += distanceMatrix[x][y] ;
+            //System.out.println(x);
+            //System.out.println(y);
+            //System.out.println(numberOfClients-1);
+
+            //fitness1 += distanceMatrix[x][y] ;
         }
         int firstClient ;
         int lastClient  ;
@@ -117,7 +124,7 @@ public class VRP extends AbstractIntegerPermutationProblem {
             matrix = new double[listOfValidNodes.size()][listOfValidNodes.size()];
             // Initialize timestamp map (avoids null pointer exception)
             timestampMap = new HashMap<>();
-            // Initialize distance map (store each link distence)
+            // Initialize distance map (store each link distance)
             distanceMap = new HashMap<String, Double>();
             // Initialize the time map (store each link average time)
             timeMap = new HashMap<String, String>();

@@ -8,4 +8,4 @@ COPY resources/vrpdata/89-traffic /data/
 
 WORKDIR /data/output
 
-CMD ["java", "-cp", "/opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar", "org.uma.jmetal.example.singleobjective.VRPRunner", "/data/89-traffic"]
+CMD ["java", "-cp", "/opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar", "org.uma.jmetal.example.singleobjective.GenerationalGeneticAlgorithmVRPRunner", "/data/89-traffic"]
