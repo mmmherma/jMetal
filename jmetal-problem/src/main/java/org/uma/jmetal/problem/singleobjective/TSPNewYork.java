@@ -97,14 +97,12 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
 
       // Clean GPS coordinates
       Map<String, JSONObject> cleanCitiesMap = new HashMap<>();
-      uniqueCities.forEach((id, city) -> {
-        cleanCitiesMap.put(id, cleanCoordinates(city));
-      });
+      uniqueCities.forEach( (id, city) -> cleanCitiesMap.put(id, cleanCoordinates(city)) );
 
       // Compute distances
-      cleanCitiesMap.forEach((id, city) -> {
-        System.out.println(computeDistance(city));
-      });
+      Map<String, Double> linkDistance = new HashMap<>();
+      cleanCitiesMap.forEach( (id, city) -> linkDistance.put(id, computeDistance(city)) );
+      linkDistance.forEach( (id, distance) -> System.out.println(id + ": " + distance) );
 
       System.out.println("Cities size(): " + cities.size());
       System.out.println("Unique cities size(): " + uniqueCities.size());
