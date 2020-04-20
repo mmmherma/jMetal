@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:11.0.6-jre
 
 ADD jmetal-example/target/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar /opt/jmetal-example-6.0-SNAPSHOT-jar-with-dependencies.jar
 
