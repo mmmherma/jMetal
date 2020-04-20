@@ -93,7 +93,18 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
         }
       });
 
-      uniqueCities.forEach((id, city) -> System.out.println(id + " " + city.get("link_points")));
+//      uniqueCities.forEach((id, city) -> System.out.println(id + " " + city.get("link_points")));
+
+      // Clean GPS coordinates
+      Map<String, JSONObject> cleanCitiesMap = new HashMap<>();
+      uniqueCities.forEach((id, city) -> {
+        cleanCitiesMap.put(id, cleanCoordinates(city));
+      });
+
+      // Compute distances
+      cleanCitiesMap.forEach((id, city) -> {
+        System.out.println(computeDistance(city));
+      });
 
       System.out.println("Cities size(): " + cities.size());
       System.out.println("Unique cities size(): " + uniqueCities.size());
@@ -104,11 +115,68 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
     return matrix;
   }
 
-  /*private double [][] getDistanceMatrix(Map<String, JSONObject> cities) {
-    double [][] matrix = ;
+  private JSONObject cleanCoordinates(JSONObject city) {
+    String clean = new String();
 
-    return matrix;
-  }*/
+    // Get coordinates from JSONObject
+    String coordinates = city.get("link_points").toString();
+
+    // Split coordinates using spaces
+    String[] splitCoordinates = coordinates.split("\\s+");
+
+    for (int i = 0; i < splitCoordinates.length; i++) {
+      String[] latLon = splitCoordinates[i].split(",");
+
+      if (latLon.length == 2) {
+        clean += splitCoordinates[i] + " ";
+      }
+    }
+    System.out.println(clean.substring(0, clean.length()-1));
+    city.put("link_points", clean.substring(0, clean.length()-1));
+
+    return city;
+  }
+
+  private Double computeDistance(JSONObject city) {
+    Double distance = 0.0;
+
+    // Get coordinates
+    String coordinates = city.get("link_points").toString();
+    // Split coordinates
+    String[] splitCoordinates = coordinates.split("\\s+");
+
+    for (int i = 0; i < splitCoordinates.length-2; i++) {
+      String[] latlon1 = splitCoordinates[i].split(",");
+      String[] latlon2 = splitCoordinates[i+1].split(",");
+
+      distance += distanceFromCoordinates(
+              Double.parseDouble(latlon1[0]), Double.parseDouble(latlon1[1]),
+              Double.parseDouble(latlon2[0]), Double.parseDouble(latlon2[1])
+      );
+    }
+
+    return distance;
+  }
+
+  double distanceFromCoordinates(double latitude1, double longitude1, double latitude2, double longitude2) {
+    // Set Earth radius
+    double earthDIameter = 6371e3;
+
+    // Latitudes to radians
+    latitude1 = Math.toRadians(latitude1);
+    latitude2 = Math.toRadians(latitude2);
+
+    // Difference between latitudes and longitudes in radians
+    double latitudeDifference = Math.toRadians(latitude2) - Math.toRadians(latitude1);
+    double longitudeDifference = Math.toRadians(longitude2) - Math.toRadians(longitude1);
+
+    // Compute distance
+    double a = Math.sin(latitudeDifference/2) * Math.sin(latitudeDifference/2) +
+            Math.cos(latitude1) * Math.cos(latitude2) * Math.sin(longitudeDifference/2) * Math.sin(longitudeDifference/2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return earthDIameter * c;
+  }
 
   @Override public int getLength() {
     return numberOfCities ;
