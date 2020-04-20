@@ -93,8 +93,6 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
         }
       });
 
-//      uniqueCities.forEach((id, city) -> System.out.println(id + " " + city.get("link_points")));
-
       // Clean GPS coordinates
       Map<String, JSONObject> cleanCitiesMap = new HashMap<>();
       uniqueCities.forEach( (id, city) -> cleanCitiesMap.put(id, cleanCoordinates(city)) );
@@ -102,10 +100,6 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
       // Compute distances
       Map<String, Double> linkDistance = new HashMap<>();
       cleanCitiesMap.forEach( (id, city) -> linkDistance.put(id, computeDistance(city)) );
-      linkDistance.forEach( (id, distance) -> System.out.println(id + ": " + distance) );
-
-      System.out.println("Cities size(): " + cities.size());
-      System.out.println("Unique cities size(): " + uniqueCities.size());
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -129,7 +123,7 @@ public class TSPNewYork extends AbstractIntegerPermutationProblem {
         clean += splitCoordinates[i] + " ";
       }
     }
-    System.out.println(clean.substring(0, clean.length()-1));
+
     city.put("link_points", clean.substring(0, clean.length()-1));
 
     return city;
