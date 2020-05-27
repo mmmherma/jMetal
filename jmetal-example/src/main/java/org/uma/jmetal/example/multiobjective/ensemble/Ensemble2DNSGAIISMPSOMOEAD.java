@@ -38,7 +38,7 @@ public class Ensemble2DNSGAIISMPSOMOEAD extends AbstractAlgorithmRunner {
     String problemName;
 
     problemName = "org.uma.jmetal.problem.multiobjective.lz09.LZ09F4";
-    String referenceParetoFront = "resources/referenceFronts/LZ09_F4.pf";
+    String referenceParetoFront = "resources/referenceFronts/LZ09_F4.csv";
 
     problem = (DoubleProblem) ProblemUtils.<DoubleSolution>loadProblem(problemName);
 
@@ -89,8 +89,6 @@ public class Ensemble2DNSGAIISMPSOMOEAD extends AbstractAlgorithmRunner {
     int maximumNumberOfReplacedSolutions = 2;
 
     AggregativeFunction aggregativeFunction = new Tschebyscheff();
-
-    Archive<DoubleSolution> externalArchive = new NonDominatedSolutionListArchive<>();
 
     Algorithm<List<DoubleSolution>> moead =
         new MOEADDE(

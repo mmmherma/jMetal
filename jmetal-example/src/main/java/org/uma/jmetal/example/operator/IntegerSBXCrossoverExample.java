@@ -1,16 +1,15 @@
 package org.uma.jmetal.example.operator;
 
 import org.uma.jmetal.lab.plot.PlotFront;
-import org.uma.jmetal.lab.plot.impl.Plot2DSmile;
+import org.uma.jmetal.lab.plot.impl.PlotSmile;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.crossover.impl.IntegerSBXCrossover;
 import org.uma.jmetal.problem.integerproblem.IntegerProblem;
 import org.uma.jmetal.problem.multiobjective.NMMin;
 import org.uma.jmetal.solution.integersolution.IntegerSolution;
-import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.comparator.IntegerVariableComparator;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,13 +37,24 @@ public class IntegerSBXCrossoverExample {
    *
    * @param args Command line arguments
    */
-  public static void main(String[] args) throws FileNotFoundException {
-    if (args.length != 3) {
-      throw new JMetalException("Usage: numberOfSolutions granularity distributionIndex") ;
+  public static void main(String[] args) {
+    int numberOfPoints ;
+    int granularity ;
+    double distributionIndex ;
+
+    if (args.length !=3) {
+      JMetalLogger.logger.info("Usage: numberOfSolutions granularity distributionIndex") ;
+      JMetalLogger.logger.info("Using default parameters") ;
+
+      numberOfPoints = 10000 ;
+      granularity = 100 ;
+      distributionIndex = 10.0 ;
+    } else {
+      numberOfPoints = Integer.parseInt(args[0]);
+      granularity = Integer.parseInt(args[1]);
+      distributionIndex = Double.parseDouble(args[2]);
     }
-    int numberOfPoints = Integer.valueOf(args[0]) ;
-    int granularity = Integer.valueOf(args[1]) ;
-    double distributionIndex = Double.valueOf(args[2]) ;
+
     IntegerProblem problem ;
 
     problem = new NMMin(1, -50, 50, -100, 100) ;
@@ -67,7 +77,7 @@ public class IntegerSBXCrossoverExample {
 
     double[][] classifier = classify(population, problem, granularity);
 
-    PlotFront plot = new Plot2DSmile(classifier) ;
+    PlotFront plot = new PlotSmile(classifier) ;
     plot.plot();
   }
 

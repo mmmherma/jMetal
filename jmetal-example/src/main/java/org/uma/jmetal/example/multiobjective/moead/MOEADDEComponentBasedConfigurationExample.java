@@ -43,7 +43,7 @@ public class MOEADDEComponentBasedConfigurationExample extends AbstractAlgorithm
     DifferentialEvolutionCrossover crossover;
 
     String problemName = "org.uma.jmetal.problem.multiobjective.lz09.LZ09F2";
-    String referenceParetoFront = "resources/referenceFronts/LZ09_F2.pf";
+    String referenceParetoFront = "resources/referenceFronts/LZ09_F2.csv";
 
     problem = (DoubleProblem) ProblemUtils.<DoubleSolution>loadProblem(problemName);
 
@@ -80,8 +80,8 @@ public class MOEADDEComponentBasedConfigurationExample extends AbstractAlgorithm
 
     int maximumNumberOfReplacedSolutions = 2;
     AggregativeFunction aggregativeFunction = new Tschebyscheff();
-    MOEADReplacement replacement =
-        new MOEADReplacement(
+    MOEADReplacement<DoubleSolution> replacement =
+        new MOEADReplacement<>(
             selection,
             neighborhood,
             aggregativeFunction,

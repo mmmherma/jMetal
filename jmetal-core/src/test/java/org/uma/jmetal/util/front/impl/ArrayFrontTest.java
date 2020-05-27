@@ -6,9 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.uma.jmetal.solution.doublesolution.DoubleSolution;
 import org.uma.jmetal.solution.doublesolution.impl.DefaultDoubleSolution;
@@ -76,7 +74,7 @@ public class ArrayFrontTest {
   @Test
   public void shouldConstructorCreateAnArranFrontFromAFileContainingA2DFront()
       throws FileNotFoundException {
-    Front storeFront = new ArrayFront(frontDirectory + "/ZDT1.pf");
+    Front storeFront = new ArrayFront(frontDirectory + "/ZDT1.csv");
 
     assertEquals(1001, storeFront.getNumberOfPoints());
     assertEquals(0.0, storeFront.getPoint(0).getValues()[0], 0.0001);
@@ -89,7 +87,7 @@ public class ArrayFrontTest {
   @Ignore
   public void shouldConstructorCreateAnArranFrontFromAFileContainingA3DFront()
       throws FileNotFoundException {
-    Front storeFront = new ArrayFront(frontDirectory + "/DTLZ1.3D.pf");
+    Front storeFront = new ArrayFront(frontDirectory + "/DTLZ1.3D.csv");
 
     assertEquals(9901, storeFront.getNumberOfPoints());
 

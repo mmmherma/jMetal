@@ -1,13 +1,13 @@
 package org.uma.jmetal.example.operator;
 
 import org.uma.jmetal.lab.plot.PlotFront;
-import org.uma.jmetal.lab.plot.impl.Plot2DSmile;
+import org.uma.jmetal.lab.plot.impl.PlotSmile;
 import org.uma.jmetal.operator.crossover.CrossoverOperator;
 import org.uma.jmetal.operator.crossover.impl.BLXAlphaCrossover;
 import org.uma.jmetal.problem.doubleproblem.DoubleProblem;
 import org.uma.jmetal.problem.multiobjective.Kursawe;
 import org.uma.jmetal.solution.doublesolution.DoubleSolution;
-import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.comparator.DoubleVariableComparator;
 import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
@@ -37,12 +37,23 @@ public class BLXAlphaCrossoverExample {
    * @param args Command line arguments
    */
   public static void main(String[] args) throws FileNotFoundException {
-    if (args.length != 3) {
-      throw new JMetalException("Usage: numberOfSolutions granularity alpha");
+    int numberOfPoints ;
+    int granularity ;
+    double alpha ;
+
+    if (args.length !=3) {
+      JMetalLogger.logger.info("Usage: numberOfSolutions granularity alpha") ;
+      JMetalLogger.logger.info("Using default parameters") ;
+
+      numberOfPoints = 10000 ;
+      granularity = 100 ;
+      alpha = 0.1 ;
+    } else {
+      numberOfPoints = Integer.parseInt(args[0]);
+      granularity = Integer.parseInt(args[1]);
+      alpha = Double.parseDouble(args[2]);
     }
-    int numberOfPoints = Integer.valueOf(args[0]);
-    int granularity = Integer.valueOf(args[1]);
-    double alpha = Double.valueOf(args[2]);
+
     DoubleProblem problem;
 
     problem = new Kursawe(1);
@@ -68,7 +79,7 @@ public class BLXAlphaCrossoverExample {
         .print();
 
     double[][] classifier = classify(population, problem, granularity);
-    PlotFront plot = new Plot2DSmile(classifier);
+    PlotFront plot = new PlotSmile(classifier);
     plot.plot();
   }
 

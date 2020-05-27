@@ -1,13 +1,13 @@
 package org.uma.jmetal.example.operator;
 
 import org.uma.jmetal.lab.plot.PlotFront;
-import org.uma.jmetal.lab.plot.impl.Plot2DSmile;
+import org.uma.jmetal.lab.plot.impl.PlotSmile;
 import org.uma.jmetal.operator.mutation.MutationOperator;
 import org.uma.jmetal.operator.mutation.impl.PolynomialMutation;
 import org.uma.jmetal.problem.doubleproblem.DoubleProblem;
 import org.uma.jmetal.problem.singleobjective.Sphere;
 import org.uma.jmetal.solution.doublesolution.DoubleSolution;
-import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.comparator.DoubleVariableComparator;
 
 import java.io.FileNotFoundException;
@@ -37,12 +37,23 @@ public class PolynomialMutationExample {
    * @param args Command line arguments
    */
   public static void main(String[] args) throws FileNotFoundException {
+    int numberOfPoints ;
+    int granularity ;
+    double distributionIndex ;
+
     if (args.length !=3) {
-      throw new JMetalException("Usage: numberOfSolutions granularity distributionIndex") ;
+      JMetalLogger.logger.info("Usage: numberOfSolutions granularity distributionIndex") ;
+      JMetalLogger.logger.info("Using default parameters") ;
+
+      numberOfPoints = 10000 ;
+      granularity = 100 ;
+      distributionIndex = 20.0 ;
+    } else {
+      numberOfPoints = Integer.parseInt(args[0]);
+      granularity = Integer.parseInt(args[1]);
+      distributionIndex = Double.parseDouble(args[2]);
     }
-    int numberOfPoints = Integer.valueOf(args[0]) ;
-    int granularity = Integer.valueOf(args[1]) ;
-    double distributionIndex = Double.valueOf(args[2]) ;
+
     DoubleProblem problem ;
 
     problem = new Sphere(1) ;
@@ -58,10 +69,10 @@ public class PolynomialMutationExample {
       population.add(newSolution) ;
     }
 
-    Collections.sort(population, new DoubleVariableComparator()) ;
+    population.sort(new DoubleVariableComparator());
     double[][] classifier = classify(population, problem, granularity);
 
-    PlotFront plot = new Plot2DSmile(classifier) ;
+    PlotFront plot = new PlotSmile(classifier, "") ;
     plot.plot();
   }
 
